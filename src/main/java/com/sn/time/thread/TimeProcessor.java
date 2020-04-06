@@ -18,9 +18,7 @@ public class TimeProcessor {
     @Async("TimeExecutor")
     public void timeExecutor(Map<String, Object> map) {
         try {
-            String sourceName = String.valueOf(map.get("sourceName"));
-            String sourceUrl = String.valueOf(map.get("sourceUrl"));
-            SourceContent.doSource(sourceName, sourceUrl);
+            SourceContent.doSource(map);
         } catch (Exception e) {
             log.error("定时更新失败: {}", e.getMessage());
         }
