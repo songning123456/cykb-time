@@ -3,13 +3,11 @@ package com.sn.time;
 import com.sn.time.repository.ChaptersRepository;
 import com.sn.time.repository.NovelsRepository;
 import com.sn.time.thread.TimeProcessor;
-import com.sn.time.util.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
