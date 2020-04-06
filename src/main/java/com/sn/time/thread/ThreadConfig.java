@@ -18,7 +18,7 @@ public class ThreadConfig {
     private Integer queueCapacity = 500;
     private Integer keepAliveSecond = 60;
     private String threadNamePrefix = "TimeAsync_";
-    private Integer awaitTerminationSeconds = 60 * 60;
+    private Integer awaitTerminationSeconds = 60 * 60 * 3;
 
     @Bean(name = "TimeExecutor")
     public Executor theftExecutor() {
