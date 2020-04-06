@@ -29,6 +29,19 @@ public class DateUtil {
         return date;
     }
 
+    /**
+     * java.util.Date => String
+     *
+     * @param date      要格式的java.util.Date对象
+     * @param strFormat 输出的String字符串格式的限定（如："yyyy-MM-dd HH:mm:ss"）
+     * @return 表示日期的字符串
+     */
+    public static String dateToStr(Date date, String strFormat) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(strFormat);
+        String str = simpleDateFormat.format(date);
+        return str;
+    }
+
     public static List<Date> stepTime(Date oldTime, Date newTime, int size) {
         List<Date> result = new ArrayList<>();
         Long oldVal = oldTime.getTime();
