@@ -8,8 +8,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * @author: songning
@@ -24,15 +27,28 @@ public class Schedule {
     private NovelsRepository novelsRepository;
     @Autowired
     private TimeProcessor timeProcessor;
+    @Resource(name = "SourceExecutor")
+    private Executor sourceExecutor;
 
     /**
      * 每天凌晨执行
      */
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateLatest() {
-        List<Map<String, Object>> novelsList = novelsRepository.findNative();
-        for (Map<String, Object> novels : novelsList) {
-            timeProcessor.timeExecutor(novels);
+        try {
+            List<String> sourceList = Arrays.asList("笔趣阁", "147小说", "天天书吧", "飞库小说", "趣书吧");
+            for (String sourceName : sourceList) {
+                sourceExecutor.execute(() -> {
+                    List<Map<String, Object>> novelsList = novelsRepository.findBySourceNameNative(sourceName);
+                    // 排除最后一个正在新增的小说
+                    for (int i = 0, length = novelsList.size(); i < length - 1; i++) {
+                        timeProcessor.timeExecutor(novelsList.get(i));
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("定时更新失败: {}", e.getMessage());
         }
     }
 }

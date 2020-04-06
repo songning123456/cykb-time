@@ -13,6 +13,6 @@ import java.util.Map;
  */
 public interface NovelsRepository extends JpaRepository<Novels, String> {
 
-    @Query(value = "select id as novelsId, source_name as sourceName, source_url as sourceUrl from novels", nativeQuery = true)
-    List<Map<String, Object>> findNative();
+    @Query(value = "select id as novelsId, source_name as sourceName, source_url as sourceUrl from novels where source_name = ?1 order by create_time asc", nativeQuery = true)
+    List<Map<String, Object>> findBySourceNameNative(String sourceName);
 }

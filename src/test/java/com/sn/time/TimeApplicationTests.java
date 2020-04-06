@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -24,6 +27,8 @@ class TimeApplicationTests {
     private NovelsRepository novelsRepository;
     @Autowired
     private ChaptersRepository chaptersRepository;
+    @Resource(name = "SourceExecutor")
+    private Executor sourceExecutor;
 
     @Test
     void contextLoads() {
@@ -34,10 +39,15 @@ class TimeApplicationTests {
 
     @Test
     public void testBiquge() {
-        List<Map<String, Object>> novelsList = novelsRepository.findNative();
-        for (Map<String, Object> novels : novelsList) {
-            timeProcessor.timeExecutor(novels);
+        List<String> sourceList = Arrays.asList("笔趣阁", "147小说", "天天书吧", "飞库小说", "趣书吧");
+        for (String sourceName : sourceList) {
+            sourceExecutor.execute(() -> {
+                List<Map<String, Object>> novelsList = novelsRepository.findBySourceNameNative(sourceName);
+                // 排除最后一个正在新增的小说
+                for (int i = 0, length = novelsList.size(); i < length - 1; i++) {
+                    timeProcessor.timeExecutor(novelsList.get(i));
+                }
+            });
         }
     }
-
 }
