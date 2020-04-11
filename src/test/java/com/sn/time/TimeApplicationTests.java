@@ -2,7 +2,6 @@ package com.sn.time;
 
 import com.sn.time.repository.ChaptersRepository;
 import com.sn.time.repository.NovelsRepository;
-import com.sn.time.thread.TimeProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

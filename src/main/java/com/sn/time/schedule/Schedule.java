@@ -1,7 +1,7 @@
 package com.sn.time.schedule;
 
 import com.sn.time.repository.NovelsRepository;
-import com.sn.time.thread.TimeProcessor;
+import com.sn.time.strategy.SourceContent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -25,8 +25,6 @@ public class Schedule {
 
     @Autowired
     private NovelsRepository novelsRepository;
-    @Autowired
-    private TimeProcessor timeProcessor;
     @Resource(name = "SourceExecutor")
     private Executor sourceExecutor;
 
@@ -42,7 +40,7 @@ public class Schedule {
                     List<Map<String, Object>> novelsList = novelsRepository.findBySourceNameNative(sourceName);
                     // 排除最后一个正在新增的小说
                     for (int i = 0, length = novelsList.size(); i < length - 1; i++) {
-                        timeProcessor.timeExecutor(novelsList.get(i));
+                        SourceContent.doSource(novelsList.get(i));
                     }
                 });
             }

@@ -7,6 +7,7 @@ import com.sn.time.strategy.SourceService;
 import com.sn.time.util.BeanUtil;
 import com.sn.time.util.DateUtil;
 import com.sn.time.util.HttpUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @author: songning
  * @date: 2020/4/5 15:10
  */
+@Slf4j
 public class FeikuSourceServiceImpl implements SourceService {
     @Override
     public void updateChapter(Map<String, Object> map) {
@@ -56,6 +58,7 @@ public class FeikuSourceServiceImpl implements SourceService {
                     String content = contentDoc.getElementsByClass("article-con").get(0).html();
                     Chapters chapters = Chapters.builder().chapter(chapter).content(content).novelsId(novelsId).updateTime(timeList.get(i - isExistList.size())).build();
                      chaptersService.save(chapters);
+                    log.info("当前小说novelsId: {}; 更新章节chapter: {}", novelsId, chapter);
                 }
             }
         }
